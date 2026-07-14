@@ -111,7 +111,7 @@ class vLLMRollout(BaseRollout):
             else:
                 vllm_ps.initialize_model_parallel(tensor_model_parallel_size=tensor_parallel_size)
 
-        assert model_hf_config.max_position_embeddings >= config.prompt_length + config.response_length, (
+        assert model_hf_config.get_text_config().max_position_embeddings >= config.prompt_length + config.response_length, (
             "model context length should be greater than total sequence length"
         )
 
@@ -143,7 +143,7 @@ class vLLMRollout(BaseRollout):
             # limit_mm_per_prompt=limit_mm_per_prompt,
             skip_tokenizer_init=False,
             # max_model_len=max_model_len + 16384,
-            max_model_len=32768,
+            max_model_len=max_model_len,
             load_format=load_format,
             disable_log_stats=config.disable_log_stats,
             max_num_batched_tokens=max_num_batched_tokens,

@@ -233,6 +233,14 @@ def compute_score(predict_str: str, ground_truth: str, extra_info=None) -> float
         temperature=0.3,
     )
     response = chat_response.choices[0].message.content.strip()
+    if response is None:
+        # judge 被截断（大概率是还在 <think> 里就没token了），content 会是 None
+        # 兜底：优先取 reasoning_content 里可能带出的信息，取不到就当空串处理
+        response = getattr(judge_message, "reasoning_content", None) or ""
+        print(f"[WARNING] judge content is None, finish_reason="
+              f"{chat_response.choices[0].finish_reason}, "
+              f"fallback_raw={response[:200]!r}")
+    response = response.strip()
     # print(response)
     if 'Judgement:' in response:
         response = response.split('Judgement:')[-1].strip()
