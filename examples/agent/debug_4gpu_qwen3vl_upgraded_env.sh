@@ -8,6 +8,8 @@ EXPERIMENT_NAME="debug_4gpu_qwen3vl_upgraded_env"
 source /home/zhangyt/miniconda3/etc/profile.d/conda.sh
 conda activate /data/zhangyt/conda_envs/deepeyes_qwen3
 
+export VLLM_USE_FLASHINFER_SAMPLER=0
+
 export SAVE_CHECKPOINT_DIR=/data/zhangyt/verl_checkpoints
 export WORLD_SIZE=1
 # 换成4卡：3、5、6、7号（这几张卡显存空闲量够，但GPU利用率较高，正被别人用来训练）
